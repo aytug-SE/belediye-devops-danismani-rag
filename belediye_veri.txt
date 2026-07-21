@@ -1,0 +1,29 @@
+[SİSTEM: E-BELEDİYE WEB PORTALI]
+E-Belediye portalı Nginx arkasında 10.10.1.50 IP adresli sunucuda çalışmaktadır. 
+Veritabanı olarak PostgreSQL kullanılmaktadır. 
+Nginx 502 Bad Gateway hatası alındığında önce /var/log/nginx/error.log kontrol edilmeli, ardından "systemctl restart e-belediye-backend" komutu çalıştırılmalıdır.
+
+[SİSTEM: KENT BİLGİ SİSTEMİ (KBS) & COĞRAFİ BİLGİ SİSTEMİ (CBS)]
+KBS ve CBS servisleri Kubernetes ortamında "kbs-prod" namespace altında çalışır.
+MapServer podları bellek sızıntısı yaparsa "kubectl rollout restart deployment/mapserver -n kbs-prod" komutu ile güvenli şekilde yeniden başlatılır.
+
+[SİSTEM: BELEDİYE YEDEKLEME VE VERİ MERKEZİ]
+Gece 02:00'de çalışan otomatize yedekleme script'i RSYNC ile /mnt/belediye_backup dizinine yazar.
+Eğer disk doluluğu %90 üzerine çıkarsa Prometheus "BelediyeDiskFull" uyarısı tetikler. Acil durumda /tmp/old_logs klasörü silinebilir.
+
+[SİSTEM: BELEDİYE E-İMZA VE BELGENET (EBYS)]
+Elektronik Belge Yönetim Sistemi (EBYS) 10.10.1.60 IP'li Java/Tomcat sunucusunda hizmet verir.
+E-İmza doğrulama hatası alındığında Kamu SM OCSP sunucularına 8080 ve 8443 portlarından erişim kontrol edilmelidir. 
+Tomcat servisi kilitlenirse "systemctl restart tomcat9" komutu çalıştırılmalıdır.
+
+[SİSTEM: AKILLI ŞEHİR & SENSÖR AĞLARI (IoT)]
+Trafik, hava kalitesi ve Akıllı Durak verilerini toplayan IoT Gateway servisi Docker ortamında "iot-gateway" konteyneri olarak çalışır.
+Veri akışı kesilirse MQTT Broker (Mosquitto) bağlantısı denetlenmeli ve "docker restart iot-gateway" komutu ile servis tazelenmelidir.
+
+[SİSTEM: DİJİTAL SİCİL VE TAHSİLAT VERİTABANI]
+Vatandaş sicil ve emlak/çevre temizlik vergisi veritabanı 10.10.2.10 IP'li PostgreSQL Cluster üzerinde durur.
+Veritabanında "Too many connections" hatası alınırsa PgBouncer connection pooler servisi "systemctl restart pgbouncer" ile sıfırlanmalıdır.
+
+[SİSTEM: BELEDİYE AĞ VE GÜVENLİK (NETWORK & FIREWALL)]
+Belediye dış ağ güvenlik duvarı (Firewall) üzerinde e-devlet entegrasyon portları tanımlıdır.
+Sistemciler dışarıdan VPN ile baglanırken FortiClient / OpenVPN sunucusunda 1194 UDP portunun açık olduğundan emin olmalıdır.
