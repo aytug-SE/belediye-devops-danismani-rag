@@ -1,0 +1,11 @@
+torch
+datasets
+transformers
+peft
+trl
+langchain
+langchain-community
+langchain-core
+faiss-cpu
+sentence-transformers
+accelerate
