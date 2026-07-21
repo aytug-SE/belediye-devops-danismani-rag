@@ -1,0 +1,42 @@
+====================================================================
+               CLOUD COMPUTING & DEVOPS KAVRAM SÖZLÜĞÜ
+====================================================================
+
+1. TEMEL HİZMET MODELLERİ (SERVICE MODELS)
+--------------------------------------------------------------------
+- IaaS (Infrastructure as a Service): Sanal sunucu, ağ ve depolama gibi temel altyapının kiralanması. (Örn: AWS EC2, Azure VM, DigitalOcean)
+- PaaS (Platform as a Service): Geliştiricilerin kod yazıp çalıştırabileceği hazır çalışma ortamı. Sunucu yönetimiyle uğraşılmaz. (Örn: AWS Elastic Beanstalk, Heroku)
+- SaaS (Software as a Service): İnternet üzerinden doğrudan kullanılan hazır yazılımlar. (Örn: Google Drive, Microsoft 365, Slack)
+
+2. KONTEYNER VE ORKESTRASYON (CONTAINERIZATION)
+--------------------------------------------------------------------
+- Docker: Uygulamaları ve tüm bağımlılıklarını izole bir paket ("container") haline getiren teknoloji.
+- Container: İşletim sistemi seviyesinde izolasyon sağlayan, hafif ve hızlı başlatılabilen sanal paket.
+- Image: Bir container'ın çalışması için gereken tüm kod, kütüphane ve ayarları içeren salt okunur şablon.
+- Kubernetes (K8s): Yüzlerce veya binlerce Docker container'ını otomatik olarak yöneten, dağıtan ve ölçekleyen orkestrasyon aracı.
+- Pod: Kubernetes'teki en küçük dağıtım birimi. İçinde bir veya birden fazla container barındırır.
+- Helm: Kubernetes uygulamalarını paketlemek ve kolayca kurmak için kullanılan paket yöneticisi.
+
+3. YÜK DENGELENMESİ VE SUNUCU TİPLERİ (NETWORKING & INFRASTRUCTURE)
+--------------------------------------------------------------------
+- Load Balancer (Yük Dengeleyici): Gelen internet trafiğini birden fazla sunucuya eşit/dengeli şekilde dağıtan sistem.
+- Reverse Proxy: İstemci (client) ile arka plan sunucuları (backend) arasında duran; güvenlik, önbellekleme ve yönlendirme yapan ara sunucu (Örn: Nginx, HAProxy).
+- High Availability (HA - Yüksek Erişilebilirlik): Sistemlerin kesintisiz (%99.99) çalışmasını sağlayan yedekli altyapı mimarisi.
+- Auto-scaling (Otomatik Ölçekleme): Trafik arttığında sunucu/pod sayısını otomatik artıran, trafik azaldığında düşüren mekanizma.
+
+4. SÜREKLİ ENTEGRASYON VE DAĞITIM (CI/CD)
+--------------------------------------------------------------------
+- CI/CD (Continuous Integration / Continuous Deployment): Kodun otomatik olarak test edilmesi, derlenmesi ve canlı ortama (production) hatasız aktarılması süreci.
+- Pipeline: Kodun yazıldıktan canlıya çıkana kadar geçtiği otomatik test, derleme ve dağıtım aşamalarının tamamı (Örn: GitHub Actions, GitLab CI, Jenkins).
+
+5. MİMARİ VE DEPOLAMA KAVRAMLARI (ARCHITECTURE & STORAGE)
+--------------------------------------------------------------------
+- Microservices (Mikroservisler): Büyük bir uygulamanın birbirine bağımlılığı az, küçük ve bağımsız servisler halinde mimarileştirilmesi.
+- Object Storage: Verileri bloklar yerine nesne (object) olarak saklayan, ölçeklenebilir depolama yapısı (Örn: AWS S3, MinIO).
+- Vector Database (Vektör Veritabanı): Metin veya görsellerin sayısal vektör (embedding) karşılıklarını saklayan ve anlamsal benzerlik araması yapan veritabanı (Örn: FAISS, ChromaDB, Pinecone).
+
+6. DEVOPS & YÖNETİM (MANAGEMENT & INFRASTRUCTURE AS CODE)
+--------------------------------------------------------------------
+- IaC (Infrastructure as Code): Sunucu ve ağ altyapılarını arayüzden elle değil, kod yazarak otomatik kurma yöntemi (Örn: Terraform, Ansible).
+- Observability / Monitoring: Sistemlerin sağlık durumunu, loglarını ve performansını anlık izleme süreci (Örn: Prometheus, Grafana).
+- RAG (Retrieval-Augmented Generation): LLM modellerine dış kaynaklardan (doküman, veritabanı) güncel bilgi besleyerek doğru cevap vermesini sağlayan mimari.
