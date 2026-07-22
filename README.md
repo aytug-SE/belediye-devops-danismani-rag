@@ -1,4 +1,4 @@
-# 🏛️ Belediye DevOps & IT Danışmanı (LLM + RAG)
+# 🏛️ Belediye DevOps & IT Danışmanı (LLM + RAG) (İngilizce)
 
 Bu proje, belediye IT altyapılarında karşılaşılan sunucu, ağ ve sistem arızalarını hızlıca teşhis etmek ve çözüm sunmak amacıyla geliştirilmiş **domain-specific (alana özel)** bir yapay zeka asistanıdır.
 
