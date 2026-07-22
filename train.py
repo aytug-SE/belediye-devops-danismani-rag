@@ -3,7 +3,7 @@ from trl import SFTTrainer
 import model_config as m_cfg
 import dataset_loader as d_ld
 
-MODEL_PATH = "/home/aytug/.cache/huggingface/hub/models--TinyLlama--TinyLlama-1.1B-Chat-v1.0/snapshots/fe8a4ea1ffedaf415f4da2f062534de366a451e6/"
+MODEL_PATH = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 DATASET_PATH = "cloud_dataset.jsonl"
 
 # Execute the functions to load the model, tokenizer, and dataset
