@@ -1,29 +1,29 @@
-[SİSTEM: E-BELEDİYE WEB PORTALI]
-E-Belediye portalı Nginx arkasında 10.10.1.50 IP adresli sunucuda çalışmaktadır. 
-Veritabanı olarak PostgreSQL kullanılmaktadır. 
-Nginx 502 Bad Gateway hatası alındığında önce /var/log/nginx/error.log kontrol edilmeli, ardından "systemctl restart e-belediye-backend" komutu çalıştırılmalıdır.
+[SYSTEM: E-MUNICIPALITY WEB PORTAL]
+The E-Municipality portal runs on a server with IP address 10.10.1.50 behind Nginx.
+PostgreSQL is used as the database.
+When an Nginx 502 Bad Gateway error occurs, first check /var/log/nginx/error.log, then run the command "systemctl restart e-belediye-backend".
 
-[SİSTEM: KENT BİLGİ SİSTEMİ (KBS) & COĞRAFİ BİLGİ SİSTEMİ (CBS)]
-KBS ve CBS servisleri Kubernetes ortamında "kbs-prod" namespace altında çalışır.
-MapServer podları bellek sızıntısı yaparsa "kubectl rollout restart deployment/mapserver -n kbs-prod" komutu ile güvenli şekilde yeniden başlatılır.
+[SYSTEM: CITY INFORMATION SYSTEM (KBS) & GEOGRAPHIC INFORMATION SYSTEM (GIS)]
+KBS and GIS services run in the Kubernetes environment under the "kbs-prod" namespace.
+If MapServer pods experience a memory leak, restart them safely using the command "kubectl rollout restart deployment/mapserver -n kbs-prod".
 
-[SİSTEM: BELEDİYE YEDEKLEME VE VERİ MERKEZİ]
-Gece 02:00'de çalışan otomatize yedekleme script'i RSYNC ile /mnt/belediye_backup dizinine yazar.
-Eğer disk doluluğu %90 üzerine çıkarsa Prometheus "BelediyeDiskFull" uyarısı tetikler. Acil durumda /tmp/old_logs klasörü silinebilir.
+[SYSTEM: MUNICIPALITY BACKUP AND DATA CENTER]
+The automated backup script running at 02:00 AM daily writes to the /mnt/belediye_backup directory via RSYNC.
+If disk usage exceeds 90%, Prometheus triggers the "BelediyeDiskFull" alert. In an emergency, the /tmp/old_logs folder can be deleted.
 
-[SİSTEM: BELEDİYE E-İMZA VE BELGENET (EBYS)]
-Elektronik Belge Yönetim Sistemi (EBYS) 10.10.1.60 IP'li Java/Tomcat sunucusunda hizmet verir.
-E-İmza doğrulama hatası alındığında Kamu SM OCSP sunucularına 8080 ve 8443 portlarından erişim kontrol edilmelidir. 
-Tomcat servisi kilitlenirse "systemctl restart tomcat9" komutu çalıştırılmalıdır.
+[SYSTEM: MUNICIPALITY E-SIGNATURE AND BELGENET (EDMS)]
+The Electronic Document Management System (EDMS / EBYS) operates on a Java/Tomcat server with IP address 10.10.1.60.
+When an E-Signature verification error occurs, access to Kamu SM OCSP servers via ports 8080 and 8443 should be checked.
+If the Tomcat service freezes, run the command "systemctl restart tomcat9".
 
-[SİSTEM: AKILLI ŞEHİR & SENSÖR AĞLARI (IoT)]
-Trafik, hava kalitesi ve Akıllı Durak verilerini toplayan IoT Gateway servisi Docker ortamında "iot-gateway" konteyneri olarak çalışır.
-Veri akışı kesilirse MQTT Broker (Mosquitto) bağlantısı denetlenmeli ve "docker restart iot-gateway" komutu ile servis tazelenmelidir.
+[SYSTEM: SMART CITY & SENSOR NETWORKS (IoT)]
+The IoT Gateway service, which collects traffic, air quality, and Smart Stop data, runs as a Docker container named "iot-gateway".
+If data flow is interrupted, inspect the MQTT Broker (Mosquitto) connection and refresh the service using the command "docker restart iot-gateway".
 
-[SİSTEM: DİJİTAL SİCİL VE TAHSİLAT VERİTABANI]
-Vatandaş sicil ve emlak/çevre temizlik vergisi veritabanı 10.10.2.10 IP'li PostgreSQL Cluster üzerinde durur.
-Veritabanında "Too many connections" hatası alınırsa PgBouncer connection pooler servisi "systemctl restart pgbouncer" ile sıfırlanmalıdır.
+[SYSTEM: DIGITAL REGISTRY AND COLLECTION DATABASE]
+The citizen registry and property/environmental tax database resides on a PostgreSQL Cluster with IP address 10.10.2.10.
+If a "Too many connections" error is encountered in the database, reset the PgBouncer connection pooler service using "systemctl restart pgbouncer".
 
-[SİSTEM: BELEDİYE AĞ VE GÜVENLİK (NETWORK & FIREWALL)]
-Belediye dış ağ güvenlik duvarı (Firewall) üzerinde e-devlet entegrasyon portları tanımlıdır.
-Sistemciler dışarıdan VPN ile baglanırken FortiClient / OpenVPN sunucusunda 1194 UDP portunun açık olduğundan emin olmalıdır.
+[SYSTEM: MUNICIPALITY NETWORK & FIREWALL]
+E-government integration ports are defined on the external municipal firewall.
+When system administrators connect externally via VPN, they must ensure port 1194 UDP is open on the FortiClient / OpenVPN server.
