@@ -6,7 +6,7 @@ from langchain_community.document_loaders import TextLoader
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
-print("1. Belediye dokümanları yükleniyor...")
+print("Municipality documents are loading...")
 with open("belediye_veri.txt", "r", encoding="utf-8") as f:
     raw_text = f.read()
 
@@ -14,12 +14,12 @@ with open("belediye_veri.txt", "r", encoding="utf-8") as f:
 docs = [p.strip() for p in raw_text.split("\n\n") if p.strip()]
 
 # Create a FAISS vector store from the documents
-print("2. FAISS vektör deposu oluşturuluyor...")
+print("The FAISS Vector store is being created...")
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2") # Search engine of RAG system.
 vector_store = FAISS.from_texts(docs, embeddings) 
-print("Vektör deposu hazır!")
+print("The vector store is ready.")
 
-print("\n3. Eğitilmiş Fine-tuned LLM modeli yükleniyor...")
+print("\nTrained Fine-Tuned LLM model is being loaded...")
 base_model_name = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 tokenizer = AutoTokenizer.from_pretrained(base_model_name)
 
@@ -30,26 +30,26 @@ base_model = AutoModelForCausalLM.from_pretrained(
 )
 
 model = PeftModel.from_pretrained(base_model, "./fine_tuned_devops_model")
-print("Model yüklendi ve hazır!")
+print("The model is loaded and prepared!!!")
 
 # --- RAG Question Answering ---
-def belediye_devops_sor(soru):
-    print(f"\n[SORU]: {soru}")
+def municipality_devops_ask(question):
+    print(f"\n[SORU]: {question}")
 
     # Retrieve relevant documents from the FAISS vector store
-    related_docs = vector_store.similarity_search(soru, k=1)
+    related_docs = vector_store.similarity_search(question, k=1)
     context = related_docs[0].page_content if related_docs else ""
 
-    print(f"\n[BELEDİYE BİLGİ BANKASINDAN ÇEKİLEN BAĞLAM]: \n{context}")
+    print(f"\n[CONTEXT DRAWN FROM THE MUNICIPALITY INFORMATION BANK]: \n{context}")
 
     prompt = f"""<|system|>
-You are an expert DevOps Assistant for Municipal IT Infrastructure. Answer the question using the provided Municipal Context. 
+You are an expert DevOps Assistant for Municipal IT Infrastructure. Answer the question accurately using the provided Municipal Context.
 <|user|>
 Municipal Context: 
 {context}
 
 Question: 
-{soru}
+{question}
 <|assistant|>
 """
 
@@ -58,15 +58,6 @@ Question:
     with torch.no_grad():
         outputs = model.generate(**inputs, max_new_tokens=200, temperature=0.3)
 
-    cevap = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    final_response = cevap.split("<|assistant|>")[-1].strip()
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    final_response = response.split("<|assistant|>")[-1].strip()
     return final_response
-
-# --- İLK CANLI TEST (Fonksiyonun Dışında) ---
-test_sorusu = "E-Belediye portalında 502 Bad Gateway hatası alıyoruz, hangi IP'li sunucuya bakmalıyım ve servis restart komutu nedir?"
-yanit = belediye_devops_sor(test_sorusu)
-
-print("\n" + "=" * 60)
-print("[Modelin verdiği yanıt]:")
-print(yanit)
-print("=" * 60)
