@@ -31,11 +31,11 @@ def load_model_and_tokenizer(model_path):
     
     # Configuration of LoRA
     peft_config = LoraConfig(
-        r=8,
-        lora_alpha=16,
-        target_modules=["q_proj", "v_proj"],
-        lora_dropout=0.05,
-        bias="none",
+        r=8,     # Size of the matrix
+        lora_alpha=16,   # Final decision of the model: Main model information + (alpha / r) * Gained information of LoRA 
+        target_modules=["q_proj", "v_proj"], #
+        lora_dropout=0.05, # Closes random neuron 5 percent to prevent overfitting
+        bias="none",  # y = w * x + b
         task_type="CAUSAL_LM"
     )
     
